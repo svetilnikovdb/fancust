@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: fancust
+
+  # Postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fc_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  # JPA
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# security
+security:
+  jwt:
+    secret:
+      # //// вынести в гит и прописать сюда просто secret
+      access: a404655c8c6ff523e08fe6ee9c0b08a560fb35ed2bd6dba96044ccd6a8e32336aebc2c219e8313826144f61c80d48dacb9f18c3b7a52c3e206adf56ec4e5e8b18eec5fda0f20a16d60755a2d648887ea5baaf912c9f85ccbc59efa7e02d866b2077971890e50f9feab9f5054813b3c9fdac9d050184aa31699c284e318e330d66c4ad433489cba8b16e2dea3079f43f850e0f016f2fdd433d4a55186c5c6ea0a1f0f8143ecdf8a5053fc9c6a0c09b9353bfb2848253c2b4e2f33fc41b96ddc4e657b28cee85c23b4d0919f10fe5a45284c434e7af74376e46efde1f19a43ca7f9be958c405f887f2765ce05917274a058e5aa62a1fe17de2f5bb099e26057ed5
+      refresh: 1a7819c09fa4f92f5df1539a151d47b0ff6fc18b7f02f0126b527b3c7bb5500908afa53dd165c9108de0451b036fb8d72a5ca3150a73d34fb4d4a612ed34c4c8fe0daedc6efa763cf9c91e5471c73e30d7d3d11a8275791b65e20ca78a394ac380b9b6805485da11680cec4a32bdfa68450a529ee186262420a83e173ffe10d7937e16437bdd4434b17dd6851bcf8f8475576ea2281db9d8a73a545b1296c83b999383e99e5dd96995e510d0a9e9fbd7b44cb7a4c3ebaf5c909e4df7b2ed633638302dd883ab6e9a08bc2892a519c978a420ff79eba3a2243b7b29f516fffe1494481f822a5ef46c4e406a663261e887b6cef27c721f91cb637f6f1b3fbd61b2
+    ttl:
+      access: 900 # 15 minutes
+      refresh: 86_400 # 1 month
