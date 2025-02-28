@@ -1,4 +1,4 @@
-package ru.teamfc.fancust.dto.auth.common
+package ru.teamfc.fancust.dto.common
 
 import io.swagger.v3.oas.annotations.media.Schema
 
