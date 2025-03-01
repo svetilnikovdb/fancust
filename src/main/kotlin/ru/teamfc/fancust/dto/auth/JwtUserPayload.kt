@@ -2,10 +2,9 @@ package ru.teamfc.fancust.dto.auth
 
 import io.jsonwebtoken.Claims
 import ru.teamfc.fancust.admin.Role
-import java.util.*
 
 data class JwtUserPayload(
-    val userId: UUID,
+    val userId: String,
     val deviceId: String,
 //    val isAuthorized: Boolean, проверять по Role
     val role: Role
@@ -21,9 +20,9 @@ data class JwtUserPayload(
 
     companion object {
         fun of(claims: Claims) = JwtUserPayload(
-            userId = claims.get("userId", UUID::class.java),
+            userId = claims.get("userId", String::class.java),
             deviceId = claims.get("deviceId", String::class.java),
-            role = claims.get("role", Role::class.java)
+            role = Role.valueOf(claims.get("role", String::class.java))
         )
     }
 }

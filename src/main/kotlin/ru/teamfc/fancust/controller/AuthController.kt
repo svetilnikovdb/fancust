@@ -1,11 +1,14 @@
 package ru.teamfc.fancust.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.teamfc.fancust.dto.common.DataResponse
+import ru.teamfc.fancust.dto.request.SignUpRequest
 import ru.teamfc.fancust.dto.response.AuthResponse
 import ru.teamfc.fancust.service.AuthService
 import ru.teamfc.fancust.utils.toDataResponse
@@ -19,5 +22,10 @@ class AuthController(
     @Operation(summary = "Создать гостя")
     fun createGuest(): ResponseEntity<DataResponse<AuthResponse>> =
         authService.createGuest().toDataResponse()
+
+    @PostMapping("/signUp")
+    @Operation(summary = "Регистрация")
+    fun signUp(@RequestBody @Valid request: SignUpRequest): ResponseEntity<DataResponse<AuthResponse>> =
+        authService.signUp(request).toDataResponse()
 
 }

@@ -19,7 +19,7 @@ class GlobalExceptionHandler {
             requestId = getRequestId(request),
             code = "INTERNAL_SERVER_ERROR",
             info = "Внутренняя ошибка сервера",
-            reason = e.cause?.toString()
+            reason = e.message
         )
 
         return ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR)

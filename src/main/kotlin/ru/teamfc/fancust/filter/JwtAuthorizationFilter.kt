@@ -41,7 +41,7 @@ class JwtAuthorizationFilter(
 
             val authentication = UsernamePasswordAuthenticationToken(jwtPayload, null, authorities)
 //            authentication.details = jwtPayload ////зачем??? Сюда обычно доп инфа по типу ip-адреса
-            authentication.isAuthenticated = true
+//            authentication.isAuthenticated = true ставится по умолчанию в конструкторе
 
             SecurityContextHolder.getContext().authentication = authentication
 

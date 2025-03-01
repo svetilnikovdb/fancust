@@ -43,7 +43,6 @@ class JwtServiceImpl(
     override fun generateRefreshToken(payload: JwtUserPayload): RefreshTokenDto {
         val expiration = getExpirationTime(refreshTokenExpirationTime)
         val signWith = getSigningKey(refreshTokenSecret)
- //// возвращать RefreshTokenDto, чтобы хранить в нем ttl
         val token = buildToken(payload, expiration, signWith)
         return RefreshTokenDto(token, expiration)
     }

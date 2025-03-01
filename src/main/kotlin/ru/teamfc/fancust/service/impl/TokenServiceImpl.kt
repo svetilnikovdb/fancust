@@ -1,7 +1,5 @@
 package ru.teamfc.fancust.service.impl
 
-import java.time.Instant
-import java.util.Date
 import org.springframework.stereotype.Service
 import ru.teamfc.fancust.dto.auth.JwtUserPayload
 import ru.teamfc.fancust.dto.auth.Token
@@ -16,10 +14,10 @@ class TokenServiceImpl(
     private val refreshTokenRepository: RefreshTokenRepository
 ) : TokenService {
     override fun buildTokenPair(jwtUserPayload: JwtUserPayload): Token {
-        val refreshToken = jwtService.generateRefreshToken(jwtUserPayload)
+        val refreshTokenDto = jwtService.generateRefreshToken(jwtUserPayload)
         val accessToken = jwtService.generateAccessToken(jwtUserPayload)
-        val refreshTokenEntity = RefreshToken(jwtUserPayload.deviceId, refreshToken.token, refreshToken.expiration)
+        val refreshTokenEntity = RefreshToken(jwtUserPayload.deviceId, refreshTokenDto.token, refreshTokenDto.expiration)
         refreshTokenRepository.save(refreshTokenEntity)
-        return Token(accessToken = accessToken, refreshToken = refreshToken.token)
+        return Token(accessToken = accessToken, refreshToken = refreshTokenDto.token)
     }
 }
