@@ -87,7 +87,7 @@ class JwtServiceImpl(
             logger.error("Invalid JWT signature: $e")
         } catch (e: MalformedJwtException) {
             logger.error("Malformed JWT: $e")
-        } catch (e: ExpiredJwtException) { //проверить что истекает
+        } catch (e: ExpiredJwtException) {
             logger.error("JWT token is expired: $e")
         } catch (e: UnsupportedJwtException) {
             logger.error("JWT token is unsupported: $e")

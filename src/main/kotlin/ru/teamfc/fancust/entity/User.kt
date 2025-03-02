@@ -13,6 +13,7 @@ import jakarta.persistence.Index
 import jakarta.persistence.Table
 import java.time.LocalDate
 import ru.teamfc.fancust.admin.Role
+import ru.teamfc.fancust.admin.entity.BaseEntity
 
 @Entity
 @Table(
@@ -23,7 +24,7 @@ import ru.teamfc.fancust.admin.Role
 data class User(
     @Id
     @field:Schema(description = "Ник, который указывается при регистрации", required = true)
-    val id: String, // ==nickname,
+    override val id: String,
     val firstName: String,
     val lastName: String,
     val middleName: String?,
@@ -41,11 +42,11 @@ data class User(
     val isActive: Boolean = true,
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Enumerated(EnumType.STRING)
-    val role: Role // заполняется при регистрации, может менять ADMIN(мб суперадмин)
+    val role: Role,
 
 
 //   потом какую нить другую информацию закинуть необязательную
     //    @fetchtype = lazy
 //    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
 //    val loginsInfo: List<LoginInfo> = emptyList(),
-)
+) : BaseEntity<String>(id)
