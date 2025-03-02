@@ -5,6 +5,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import ru.teamfc.fancust.dto.common.ErrorResponse
@@ -23,6 +24,19 @@ class GlobalExceptionHandler {
         )
 
         return ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthenticationException(e: AuthenticationException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        log.error("AuthenticationException was thrown: $e")
+        val error = ErrorResponse(
+            requestId = getRequestId(request),
+            code = "unauthorized",
+            info = "Для доступа к реcурсу требуется полная аутентификация",
+            reason = e.message
+        )
+
+        return ResponseEntity(error, HttpStatus.UNAUTHORIZED)
     }
 
     @ExceptionHandler(ApiException::class)
