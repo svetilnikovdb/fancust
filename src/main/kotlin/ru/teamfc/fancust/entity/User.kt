@@ -5,27 +5,32 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
 import java.time.LocalDate
 import ru.teamfc.fancust.admin.Role
-import ru.teamfc.fancust.admin.entity.BaseEntity
+import ru.teamfc.fancust.admin.entity.UUIDBaseEntity
 
 @Entity
 @Table(
     name = "users",
-    indexes = [Index(name = "idx_email", columnList = "email", unique = true)]
+    indexes = [
+        Index(name = "idx_email", columnList = "email", unique = true),
+        Index(name = "idx_nickName", columnList = "nickName", unique = true)
+    ]
 )
 @JsonNaming(SnakeCaseStrategy::class)
 data class User(
-    @Id
     @field:Schema(description = "Ник, который указывается при регистрации", required = true)
-    override val id: String,
+    @Column(unique = true)
+    val nickName: String,
+    @Column(nullable = false)
     val firstName: String,
+    @Column(nullable = false)
     val lastName: String,
     val middleName: String?,
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -38,9 +43,12 @@ data class User(
 //    val loginValue: String,
     @JsonIgnore
     val password: String,
+    @Column(nullable = false, unique = true)
     val email: String,
+    @Column(nullable = false)
     val isActive: Boolean = true,
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     val role: Role,
 
@@ -49,4 +57,4 @@ data class User(
     //    @fetchtype = lazy
 //    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
 //    val loginsInfo: List<LoginInfo> = emptyList(),
-) : BaseEntity<String>(id)
+) : UUIDBaseEntity()

@@ -6,7 +6,7 @@ import ru.teamfc.fancust.admin.Role
 import ru.teamfc.fancust.dto.request.SignUpRequest
 
 data class UserDto(
-    val id: String,
+    val nickName: String,
     val password: String,
     val firstName: String,
     val lastName: String,
@@ -19,7 +19,7 @@ data class UserDto(
 ) {
     companion object {
         fun SignUpRequest.toUserDto(): UserDto = UserDto(
-            id = nick,
+            nickName = nickName,
             firstName = firstName,
             lastName = lastName,
             middleName = middleName,

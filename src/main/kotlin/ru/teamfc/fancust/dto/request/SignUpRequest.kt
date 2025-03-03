@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 data class SignUpRequest(
     @field:NotBlank
-    val nick: String,
+    val nickName: String,
     @field:NotBlank(message = "Password is required") //// потом добавить аннотацию для пароля
     val password: String,
     @field:NotBlank

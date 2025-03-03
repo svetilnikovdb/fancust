@@ -33,7 +33,7 @@ class AuthServiceImpl(
     override fun signUp(request: SignUpRequest): AuthResponse {
         val user = userService.save(request.toUserDto())
         val authPayload = JwtUserPayload(
-            userId = user.id,
+            userId = user.nickName,
             deviceId = headers.deviceId,
             role = user.role
         )

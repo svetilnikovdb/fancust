@@ -5,6 +5,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.util.UUID
 import org.hibernate.annotations.UpdateTimestamp
 
 @MappedSuperclass
@@ -16,3 +17,5 @@ abstract class BaseEntity<ID : Serializable>(
     @UpdateTimestamp
     var updated: LocalDateTime? = null
 )
+
+abstract class UUIDBaseEntity : BaseEntity<UUID>(UUID.randomUUID())

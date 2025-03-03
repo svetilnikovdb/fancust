@@ -17,7 +17,7 @@ class UserServiceImpl(
         checkIfUserDataExists(userDto)
         val user = userDto.let {
             User(
-                id = it.id,
+                nickName = it.nickName,
                 firstName = it.firstName,
                 lastName = it.lastName,
                 middleName = it.middleName,
@@ -31,7 +31,7 @@ class UserServiceImpl(
     }
 
     private fun checkIfUserDataExists(userDto: UserDto) {
-        if (userRepository.existsById(userDto.id)) {
+        if (userRepository.existsByNickName(userDto.nickName)) {
             throw ApiError.NICK_ALREADY_EXISTS.getException()
         }
 
