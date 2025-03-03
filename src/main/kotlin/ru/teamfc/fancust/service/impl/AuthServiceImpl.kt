@@ -1,14 +1,18 @@
 package ru.teamfc.fancust.service.impl
 
 import java.util.UUID
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import ru.teamfc.fancust.admin.Role
 import ru.teamfc.fancust.common.HeadersDto
 import ru.teamfc.fancust.dto.auth.JwtUserPayload
 import ru.teamfc.fancust.dto.auth.Token
 import ru.teamfc.fancust.dto.auth.UserDto.Companion.toUserDto
+import ru.teamfc.fancust.dto.request.SignInRequest
 import ru.teamfc.fancust.dto.request.SignUpRequest
 import ru.teamfc.fancust.dto.response.AuthResponse
+import ru.teamfc.fancust.entity.User
+import ru.teamfc.fancust.exception.ApiError
 import ru.teamfc.fancust.service.AuthService
 import ru.teamfc.fancust.service.TokenService
 import ru.teamfc.fancust.service.UserService
@@ -19,6 +23,7 @@ class AuthServiceImpl(
 //    private val jwtAuthService: JwtAuthService,
     private val headers: HeadersDto,
     private val userService: UserService,
+    private val passwordEncoder: PasswordEncoder
 ) : AuthService {
     override fun createGuest(): AuthResponse {
         val authPayload = JwtUserPayload(
@@ -32,11 +37,16 @@ class AuthServiceImpl(
 
     override fun signUp(request: SignUpRequest): AuthResponse {
         val user = userService.save(request.toUserDto())
-        val authPayload = JwtUserPayload(
-            userId = user.nickName,
-            deviceId = headers.deviceId,
-            role = user.role
-        )
+        val authPayload = buildAuthPayload(user)
+        return buildAuthResponse(authPayload)
+    }
+
+    override fun signIn(request: SignInRequest): AuthResponse {
+        val user = userService.findByLogin(request.login)
+        if (!passwordEncoder.matches(request.password, user.password)) {
+            throw ApiError.WRONG_PASSWORD.getException()
+        }
+        val authPayload = buildAuthPayload(user)
         return buildAuthResponse(authPayload)
     }
 
@@ -49,5 +59,12 @@ class AuthServiceImpl(
             )
         )
     }
+
+    private fun buildAuthPayload(user: User): JwtUserPayload =
+        JwtUserPayload(
+            userId = user.nickName,
+            deviceId = headers.deviceId,
+            role = user.role
+        )
 
 }

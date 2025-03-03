@@ -40,4 +40,10 @@ class UserServiceImpl(
         }
     }
 
+    override fun findByLogin(login: String): User {
+        return userRepository.findByEmail(login)
+            ?: userRepository.findByNickName(login)
+            ?: throw ApiError.USER_NOT_FOUND.getException()
+    }
+
 }

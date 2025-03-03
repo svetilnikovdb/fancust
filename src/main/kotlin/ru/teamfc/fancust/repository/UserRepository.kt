@@ -6,4 +6,6 @@ import ru.teamfc.fancust.entity.User
 interface UserRepository : JpaRepository<User, String> {
     fun existsByNickName(nickName: String): Boolean
     fun existsByEmail(email: String): Boolean
+    fun findByNickName(email: String): User?
+    fun findByEmail(email: String): User?
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.teamfc.fancust.dto.common.DataResponse
+import ru.teamfc.fancust.dto.request.SignInRequest
 import ru.teamfc.fancust.dto.request.SignUpRequest
 import ru.teamfc.fancust.dto.response.AuthResponse
 import ru.teamfc.fancust.service.AuthService
@@ -27,5 +28,10 @@ class AuthController(
     @Operation(summary = "Регистрация")
     fun signUp(@RequestBody @Valid request: SignUpRequest): ResponseEntity<DataResponse<AuthResponse>> =
         authService.signUp(request).toDataResponse()
+
+    @PostMapping("/signIn")
+    @Operation(summary = "Авторизация")
+    fun signIn(@RequestBody @Valid request: SignInRequest): ResponseEntity<DataResponse<AuthResponse>> =
+        authService.signIn(request).toDataResponse()
 
 }
