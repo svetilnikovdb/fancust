@@ -8,12 +8,14 @@ import ru.teamfc.fancust.common.HeadersDto
 import ru.teamfc.fancust.dto.auth.JwtUserPayload
 import ru.teamfc.fancust.dto.auth.Token
 import ru.teamfc.fancust.dto.auth.UserDto.Companion.toUserDto
+import ru.teamfc.fancust.dto.request.RefreshTokenRequest
 import ru.teamfc.fancust.dto.request.SignInRequest
 import ru.teamfc.fancust.dto.request.SignUpRequest
 import ru.teamfc.fancust.dto.response.AuthResponse
 import ru.teamfc.fancust.entity.User
 import ru.teamfc.fancust.exception.ApiError
 import ru.teamfc.fancust.service.AuthService
+import ru.teamfc.fancust.service.JwtService
 import ru.teamfc.fancust.service.TokenService
 import ru.teamfc.fancust.service.UserService
 
@@ -23,7 +25,8 @@ class AuthServiceImpl(
 //    private val jwtAuthService: JwtAuthService,
     private val headers: HeadersDto,
     private val userService: UserService,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtService: JwtService
 ) : AuthService {
     override fun createGuest(): AuthResponse {
         val authPayload = JwtUserPayload(
@@ -48,6 +51,25 @@ class AuthServiceImpl(
         }
         val authPayload = buildAuthPayload(user)
         return buildAuthResponse(authPayload)
+    }
+
+    override fun refreshToken(request: RefreshTokenRequest): AuthResponse {
+        val token = request.token
+        if (isRefreshTokenValid(token)) {
+            val claims = jwtService.extractRefreshClaims(token)
+            val authPayload = JwtUserPayload.of(claims)
+            return AuthResponse(tokenService.buildTokenPair(authPayload))
+        }
+        throw ApiError.WRONG_TOKEN.getException()
+    }
+
+    private fun isRefreshTokenValid(token: String): Boolean {
+        if (!jwtService.validateRefreshToken(token)) {
+            return false
+        }
+        val deviceId = headers.deviceId
+        val foundToken = tokenService.getRefreshToken(deviceId)?.token
+        return passwordEncoder.matches(token, foundToken)
     }
 
     private fun buildAuthResponse(authPayload: JwtUserPayload): AuthResponse {

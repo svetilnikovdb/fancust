@@ -10,6 +10,7 @@ interface JwtService {
     fun generateRefreshToken(payload: JwtUserPayload): RefreshTokenDto
     fun <T> extractAccessClaim(token: String, resolver: Function<Claims, T>): T
     fun extractAccessClaims(token: String): Claims
+    fun extractRefreshClaims(token: String): Claims
     fun validateAccessToken(token: String): Boolean
     fun validateRefreshToken(token: String): Boolean
 }

@@ -8,16 +8,19 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import ru.teamfc.fancust.common.HeadersDto
 import ru.teamfc.fancust.dto.common.ErrorResponse
 
 @ControllerAdvice
-class GlobalExceptionHandler {
+class GlobalExceptionHandler(
+    val headers: HeadersDto
+) {
 
     @ExceptionHandler(Exception::class)
-    fun handleCommonException(e: Exception, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
-        log.error("Exception was thrown:")
+    fun handleCommonException(e: Exception): ResponseEntity<ErrorResponse> {
+        log.error("Exception was thrown:  $e")
         val error = ErrorResponse(
-            requestId = getRequestId(request),
+            requestId = headers.xRequestId,
             code = "INTERNAL_SERVER_ERROR",
             info = "Внутренняя ошибка сервера",
             reason = e.message
@@ -30,7 +33,7 @@ class GlobalExceptionHandler {
     fun handleAuthenticationException(e: AuthenticationException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
         log.error("AuthenticationException was thrown: $e")
         val error = ErrorResponse(
-            requestId = getRequestId(request),
+            requestId = headers.xRequestId,
             code = "unauthorized",
             info = "Для доступа к реcурсу требуется полная аутентификация",
             reason = e.message
@@ -43,7 +46,7 @@ class GlobalExceptionHandler {
     fun handleApiException(e: ApiException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
         log.error("ApiException was thrown: httpStatus: ${e.httpStatus}; code: ${e.code}; reason: ${e.info}")
         val error = ErrorResponse(
-            requestId = getRequestId(request),
+            requestId = headers.xRequestId,
             code = e.code,
             info = e.info,
             reason = e.cause?.toString()
@@ -51,9 +54,6 @@ class GlobalExceptionHandler {
 
         return ResponseEntity(error, e.httpStatus)
     }
-
-    private fun getRequestId(request: HttpServletRequest): String =
-        request.getHeader("x-request-id")
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)

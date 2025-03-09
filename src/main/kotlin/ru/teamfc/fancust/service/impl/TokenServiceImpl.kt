@@ -20,4 +20,7 @@ class TokenServiceImpl(
         refreshTokenRepository.save(refreshTokenEntity)
         return Token(accessToken = accessToken, refreshToken = refreshTokenDto.token)
     }
+
+    override fun getRefreshToken(deviceId: String): RefreshToken? =
+        refreshTokenRepository.findByDeviceId(deviceId)
 }
