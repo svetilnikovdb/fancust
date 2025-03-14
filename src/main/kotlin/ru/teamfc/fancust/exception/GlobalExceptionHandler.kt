@@ -44,11 +44,11 @@ class GlobalExceptionHandler(
 
     @ExceptionHandler(ApiException::class)
     fun handleApiException(e: ApiException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
-        log.error("ApiException was thrown: httpStatus: ${e.httpStatus}; code: ${e.code}; reason: ${e.info}")
+        log.error("ApiException was thrown: httpStatus: ${e.httpStatus}; code: ${e.code}; reason: ${e.message}")
         val error = ErrorResponse(
             requestId = headers.xRequestId,
             code = e.code,
-            info = e.info,
+            info = e.message,
             reason = e.cause?.toString()
         )
 
