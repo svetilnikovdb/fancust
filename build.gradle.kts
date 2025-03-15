@@ -39,6 +39,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.36")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.9.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 //    testImplementation("org.springframework.security:spring-security-test:6.4.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
 
