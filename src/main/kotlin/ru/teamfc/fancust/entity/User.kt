@@ -17,7 +17,7 @@ import ru.teamfc.fancust.admin.entity.UUIDBaseEntity
 
 @Entity
 @Table(
-    name = "users",
+    name = "`user`",
     indexes = [
         Index(name = "idx_email", columnList = "email", unique = true),
         Index(name = "idx_nickName", columnList = "nickName", unique = true)
